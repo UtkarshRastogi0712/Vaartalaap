@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'chatApp',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +56,7 @@ ROOT_URLCONF = 'vaartalaapProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,8 +69,14 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'vaartalaapProject.wsgi.application'
+#WSGI_APPLICATION = 'vaartalaapProject.wsgi.application'
+ASGI_APPLICATION = 'vaartalaapProject.asgi.application'
 
+CHANNEL_LAYERS = {
+    'default' : {
+        'BACKEND' : "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
