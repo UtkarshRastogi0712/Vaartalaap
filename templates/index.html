@@ -3,73 +3,23 @@
 <div class="px-4 py-5 text-center bg-dark text-white">
     <h1 class="display-5 mx-auto my-4 fw-bold">Vaartalaap</h1>
     <h5 class="display-10 my-3 text-secondary my-50">Choose a nickname and begin chatting</h5>
-    <input type="text" id="nickname" class="my-3 form-control-sm w-25" placeholder="Nickname" aria-label="Nickname" aria-describedby="basic-addon1" required>
-    <button type='button' id="globalbtn" class='btn btn-secondary btn-large px-3 mx-1' onClick="joinGloabl()">Join Global Chat</button>
-    <input type="text" id="message" class="my-3 form-control-sm w-25" placeholder="Message" aria-label="Message" aria-describedby="basic-addon1" required>
-    <button type='button' id="messagebtn" class='btn btn-secondary btn-large px-3 mx-1' onClick="sendMessage()">Type Message</button>
+    <form id="chatForm" method="GET">
+        <input type="text" id="nickname" class="my-3 form-control-sm w-25" placeholder="Nickname" aria-label="Nickname" aria-describedby="basic-addon1" required>
+        <input type="text" id="chatroom" class="my-3 form-control-sm w-25" placeholder="Chatroom (leave empty to join Global Chat)" aria-label="Chatroom" aria-describedby="basic-addon1" required>
+        <button type='button' id="globalbtn" class='btn btn-secondary btn-large px-3 mx-1' onClick="joinChatroom()">Join Chat</button>
+    </form>
 </div>
-<div class="px-4 py-5 text-center bg-dark text-white" id="messagebox">
-    <h3>Message content</h3>
-</div>
-{%endblock%}
+{% endblock %}
 {% block jsScript%}
 <script>
-    const nickname = document.getElementById("nickname")
-    var proceed = false
-    var data =''
-    let connected = false
-    nickname.addEventListener("input", (e)=>{
-        if(e.target.value){
-            proceed=true
-            data=e.target.value
-            document.getElementById("globalbtn").className = 'btn btn-primary btn-large px-3 mx-1'
-        }else{
-            proceed=false
-            data=''
-            document.getElementById("globalbtn").className = 'btn btn-secondary btn-large px-3 mx-1'
-        }
-    })
-    let chatSocket = null
-    function joinGloabl() {
-        if(proceed){
-            chatSocket = new WebSocket(
-                'ws://'
-                + window.location.host
-                + '/chat/global/'
-            )
-            console.log("Button clicked!")
-        chatSocket.onopen = function(e) {
-            connected = true
-            console.log("Joined global chat")}
-            }
+    function joinChatroom(){
+        const form = document.getElementById("chatForm")
+        const nickname = document.getElementById("nickname").value ? document.getElementById("nickname").value : "JohnDoe"
+        const chatroom = document.getElementById("chatroom").value ? document.getElementById("chatroom").value : "global" 
+        const url = "http://" + window.location.host + "/chat/chatroom/"+chatroom+"/"+nickname+"/"
+        form.setAttribute("action","http://"+window.location.host+"/chat/chatroom/")
+        console.log(form.action)
+        form.submit()
     }
-
-    function sendMessage(){
-        if(connected){
-            document.getElementById("globalbtn").className = 'btn btn-primary btn-large px-3 mx-1'
-            const message = document.getElementById("message").value
-            chatSocket.send(JSON.stringify({
-                'message': message
-            }))
-            document.getElementById("message").value = ''
-        }
-    }
-    chatSocket.onmessage = function(e) {
-        const data = JSON.parse(e.data);
-        const message = data.message;
-        
-        setMessage(message);
-    };
-
-    function setMessage(message){
-        var msg = document.createElement('h3');
-
-        var message = document.createTextNode(message);
-        msg.appendChild(message);
-
-        var container = document.getElementById('messagebox');  
-        container.appendChild(msg);
-    }
-
 </script>
 {% endblock %}
