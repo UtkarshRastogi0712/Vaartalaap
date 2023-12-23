@@ -12,12 +12,20 @@
 {% endblock %}
 {% block jsScript%}
 <script>
+    const btnState = document.getElementById("nickname")
+    nickname.addEventListener("input", (e)=>{
+        if(e.target.value){
+            document.getElementById("globalbtn").className = 'btn btn-primary btn-large px-3 mx-1'
+        }else{
+            document.getElementById("globalbtn").className = 'btn btn-secondary btn-large px-3 mx-1'
+        }
+    })
     function joinChatroom(){
         const form = document.getElementById("chatForm")
         const nickname = document.getElementById("nickname").value ? document.getElementById("nickname").value : "JohnDoe"
         const chatroom = document.getElementById("chatroom").value ? document.getElementById("chatroom").value : "global" 
         const url = "http://" + window.location.host + "/chat/chatroom/"+chatroom+"/"+nickname+"/"
-        form.setAttribute("action","http://"+window.location.host+"/chat/chatroom/")
+        form.setAttribute("action",url)
         console.log(form.action)
         form.submit()
     }
