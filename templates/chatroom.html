@@ -1,7 +1,13 @@
 {% extends 'base.html' %} {% block title %} Home {% endblock%} 
 {% block content%}
 <div class="px-4 text-center bg-dark text-white">
-    <h3 class="display-7 mx-auto my-4 fw-bold">Welcome to {{chatroom}} {{nickname}}</h3>
+    <h3 class="display-7 mx-auto my-4 fw-bold">Welcome to {{chatroom}}, {{nickname}}!</h3>
+</div>
+<div id="chatbox" class="bg-dark m-3 vw-90">
+    <input type="text" id="messageInput" class="my-3 form-control-sm w-75" placeholder="Type message..." aria-label="messageInput" aria-describedby="basic-addon1" required>
+    <button type='button' id="messagebtn" class='btn btn-primary btn px-3 mx-1' onClick="sendMessage()">Send Message</button>
+</div>
+<div id="chatwindow" class="bg-dark-subtle m-3 p-2 vw-90 vh-90 rounded border border-3 border-dark-subtle">
 </div>
 {% endblock %}
 {% block jsScript%}
@@ -12,6 +18,47 @@
     chatSocket = new WebSocket('ws://'+ window.location.host + '/chat/'+chatroom+"/")
     chatSocket.onopen = function(e) {
         console.log("Joined global chat")
+    }
+    function sendMessage(){
+        if(document.getElementById("messageInput").value !== ''){
+            const message = document.getElementById("messageInput").value
+            chatSocket.send(JSON.stringify({
+                'room_id':chatroom,
+                'username': nickname,
+                'message': {
+                    'notify' : false,
+                    'text' : message
+            }
+            }))
+            document.getElementById("messageInput").value = ''
+        }
+    }
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const message = data.message;
+        console.log(message)
+        if(!message.notify){
+        setMessage(message.text);
+        }else{
+            setNotification(message.text);
+        }
+    };
+
+    function setMessage(message){
+        var msg = document.createElement('div');
+        var message = document.createTextNode(message);
+        msg.appendChild(message);
+
+        var container = document.getElementById('chatwindow');  
+        container.appendChild(msg);
+    }
+
+    function setNotification(message){
+        var msg = document.createElement('div');
+        var message = document.createTextNode(message);
+        msg.appendChild(message);
+        var container = document.getElementById('chatwindow');  
+        container.appendChild(msg);
     }
 </script>
 {% endblock%}
