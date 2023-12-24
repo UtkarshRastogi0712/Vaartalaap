@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-aen46r-e^=aohsrjzl5-r22(30q8d=0$0jl47rhe7ph0$54xst
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -73,10 +73,19 @@ TEMPLATES = [
 ASGI_APPLICATION = 'vaartalaapProject.asgi.application'
 
 CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
+'''
+CHANNEL_LAYERS = {
     'default' : {
         'BACKEND' : "channels.layers.InMemoryChannelLayer"
     }
-}
+}'''
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
