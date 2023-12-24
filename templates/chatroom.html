@@ -38,25 +38,40 @@
         const message = data.message;
         console.log(message)
         if(!message.notify){
-        setMessage(message.text);
+            if(data.username === nickname){
+                setMessage(data.username, message.text, true)
+            }else{
+                setMessage(data.username, message.text, false);
+            }
         }else{
             setNotification(message.text);
         }
     };
 
-    function setMessage(message){
+    function setMessage(nickname, message, owner){
+        var body = document.createElement('div')
+        if(owner){
+            body.setAttribute("class", "bg-primary p-2 ms-5 rounded border border-2 border-dark-subtle text-white text-end")
+        }else{
+            body.setAttribute("class", "bg-dark p-2 me-5 rounded border border-2 border-dark-subtle text-white")
+        }
+        var user = document.createElement('div')
+        user.appendChild(document.createTextNode(nickname+":"))
+        user.setAttribute("class", "fs-6 fst-italic text-grey")
         var msg = document.createElement('div');
         var message = document.createTextNode(message);
         msg.appendChild(message);
-
         var container = document.getElementById('chatwindow');  
-        container.appendChild(msg);
+        body.appendChild(user)
+        body.appendChild(msg);
+        container.appendChild(body)
     }
 
     function setNotification(message){
         var msg = document.createElement('div');
         var message = document.createTextNode(message);
         msg.appendChild(message);
+        msg.setAttribute("class", "")
         var container = document.getElementById('chatwindow');  
         container.appendChild(msg);
     }
