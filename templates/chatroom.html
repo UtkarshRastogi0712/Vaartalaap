@@ -15,7 +15,7 @@
     const chatroom = "{{chatroom}}"
     const nickname = "{{nickname}}"
     console.log(chatroom, nickname)
-    chatSocket = new WebSocket('ws://'+ window.location.host + '/chat/'+chatroom+"/")
+    chatSocket = new WebSocket('ws://'+ window.location.host + '/ws/chat/'+chatroom+"/"+nickname+"/")
     chatSocket.onopen = function(e) {
         console.log("Joined global chat")
     }

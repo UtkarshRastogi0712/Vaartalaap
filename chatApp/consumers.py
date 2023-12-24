@@ -4,9 +4,9 @@ from channels.generic.websocket import WebsocketConsumer
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
-        self.room_name = 'global'
+        self.room_name = self.scope["url_route"]["kwargs"]["roomname"]
+        self.nickname = self.scope["url_route"]["kwargs"]["nickname"]
         self.room_group_name = self.room_name
-        print("Somebody joined group")
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name, self.channel_name
         )
@@ -19,7 +19,7 @@ class ChatConsumer(WebsocketConsumer):
                 "username":"username",
                 "message":{
                     "notify":True,
-                    "text":"Somebody joined the chat"
+                    "text":self.nickname + "joined the chat"
                 },
             }
         )
