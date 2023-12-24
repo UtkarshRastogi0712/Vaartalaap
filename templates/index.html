@@ -1,4 +1,33 @@
 {% extends 'base.html' %} {% block title %} Home {% endblock%} 
 {% block content%}
-<h3>Welcome to the chat room homepage.</h3>
-{%endblock%}
+<div class="px-4 py-5 text-center bg-dark text-white">
+    <h1 class="display-5 mx-auto my-4 fw-bold">Vaartalaap</h1>
+    <h5 class="display-10 my-3 text-secondary my-50">Choose a nickname and begin chatting</h5>
+    <form id="chatForm" method="GET">
+        <input type="text" id="nickname" class="my-3 form-control-sm w-25" placeholder="Nickname" aria-label="Nickname" aria-describedby="basic-addon1" required>
+        <input type="text" id="chatroom" class="my-3 form-control-sm w-25" placeholder="Chatroom (leave empty to join Global Chat)" aria-label="Chatroom" aria-describedby="basic-addon1" required>
+        <button type='button' id="globalbtn" class='btn btn-secondary btn-large px-3 mx-1' onClick="joinChatroom()">Join Chat</button>
+    </form>
+</div>
+{% endblock %}
+{% block jsScript%}
+<script>
+    const btnState = document.getElementById("nickname")
+    nickname.addEventListener("input", (e)=>{
+        if(e.target.value){
+            document.getElementById("globalbtn").className = 'btn btn-primary btn-large px-3 mx-1'
+        }else{
+            document.getElementById("globalbtn").className = 'btn btn-secondary btn-large px-3 mx-1'
+        }
+    })
+    function joinChatroom(){
+        const form = document.getElementById("chatForm")
+        const nickname = document.getElementById("nickname").value ? document.getElementById("nickname").value : "JohnDoe"
+        const chatroom = document.getElementById("chatroom").value ? document.getElementById("chatroom").value : "global" 
+        const url = "http://" + window.location.host + "/chat/chatroom/"+chatroom+"/"+nickname+"/"
+        form.setAttribute("action",url)
+        console.log(form.action)
+        form.submit()
+    }
+</script>
+{% endblock %}
