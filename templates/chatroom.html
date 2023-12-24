@@ -3,9 +3,10 @@
 <div class="px-4 text-center bg-dark text-white">
     <h3 class="display-7 mx-auto my-4 fw-bold">Welcome to {{chatroom}}, {{nickname}}!</h3>
 </div>
-<div id="chatbox" class="bg-dark m-3 vw-90">
-    <input type="text" id="messageInput" class="my-3 form-control-sm w-75" placeholder="Type message..." aria-label="messageInput" aria-describedby="basic-addon1" required>
+<div id="chatbox" class="container bg-dark m-3 vw-90">
+    <input type="text" id="messageInput" class="col my-3 form-control-sm w-75" placeholder="Type message..." aria-label="messageInput" aria-describedby="basic-addon1" required>
     <button type='button' id="messagebtn" class='btn btn-primary btn px-3 mx-1' onClick="sendMessage()">Send Message</button>
+    <form id="disconnectform" class="col mx-auto"><button type='button' id="disconnectbtn" class='btn btn-primary btn px-3 mx-1' onClick="disconnect()">Disconnect</button></form>
 </div>
 <div id="chatwindow" class="bg-dark-subtle m-3 p-2 vw-90 vh-90 rounded border border-3 border-dark-subtle">
 </div>
@@ -32,6 +33,13 @@
             }))
             document.getElementById("messageInput").value = ''
         }
+    }
+    function disconnect(){
+        const form = document.getElementById("disconnectform")
+        form.setAttribute("action","http://"+window.location.host+"/chat/")
+        chatSocket.close()
+        form.submit()
+
     }
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
