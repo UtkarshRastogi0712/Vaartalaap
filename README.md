@@ -28,3 +28,12 @@ Deployment: [link](http://3.108.196.226:8000/chat/)
     - NLTK
 - Database
     - Redis
+- Hosting
+    - AWS EC2
+
+## Working demo
+### Video:
+[![Watch the video]()](https://github.com/UtkarshRastogi0712/Vaartalaap/assets/53490007/87d17659-16c1-4cd6-bf0c-675fa9a54e64)
+
+### Image:
+<img width="953" alt="VaartalaapSS" src="https://github.com/UtkarshRastogi0712/Vaartalaap/assets/53490007/dbdc2027-a466-4640-939c-c141da3d0bf1">
