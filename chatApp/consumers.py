@@ -69,7 +69,8 @@ class ChatConsumer(WebsocketConsumer):
             nltk.download('averaged_perceptron_tagger')
             tokenisedString = pos_tag(word_tokenize(baseText))
         finally:
-            event["message"]["text"] = str(tokenisedString)
+            event["message"]["text"] = json.dumps(tokenisedString)
+            print(event, type(event["message"]["text"]))
         self.send(text_data=json.dumps({
                 "room_id":event["room_id"],
                 "username":event["username"],
