@@ -125,19 +125,19 @@
         console.log(message)
         var body = document.createElement('div')
         if(owner){
-            body.setAttribute("class", "bg-primary p-2 ms-5 rounded border border-2 border-dark-subtle text-white text-end")
+            body.setAttribute("class", "bg-primary px-3 ms-5 rounded border border-2 border-dark-subtle text-white text-end")
         }else{
-            body.setAttribute("class", "bg-dark p-2 me-5 rounded border border-2 border-dark-subtle text-white")
+            body.setAttribute("class", "bg-dark px-3 me-5 rounded border border-2 border-dark-subtle text-white")
         }
         var user = document.createElement('div')
         user.appendChild(document.createTextNode(nickname+":"))
-        user.setAttribute("class", "fs-6 fst-italic text-grey")
+        user.setAttribute("class", "row fs-6 fst-italic text-grey")
         var msg = document.createElement('div');
-        msg.setAttribute("class", "fs-6 text-black")
+        msg.setAttribute("class", "row fs-6 text-black")
         for(const key in message){
             var word = document.createElement('div')
             word.appendChild(document.createTextNode(key))
-            word.setAttribute("class", "fs-7 m-1 p-0 rounded text-center")
+            word.setAttribute("class", "w-auto fs-7 m-1 px-2 rounded text-center")
             if(message[key] in pos_tags){
                 word.style.backgroundColor = pos_tags[message[key]]
             } else{
