@@ -44,13 +44,12 @@
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         const message = data.message;
-        console.log(message)
         if(!message.notify){
-            if(data.username === nickname){
-                setMessage(data.username, message.text, true)
-            }else{
-                setMessage(data.username, message.text, false);
-            }
+                if(data.username === nickname){
+                    setMessage(data.username, message.text, true)
+                }else{
+                    setMessage(data.username, message.text, false);
+                }
         }else{
             setNotification(message.text);
         }
