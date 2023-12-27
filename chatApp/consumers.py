@@ -60,17 +60,20 @@ class ChatConsumer(WebsocketConsumer):
                 "message":event["message"]}))   
     def nltk_message(self, event):
         baseText = event["message"]["text"]
-        baseText = baseText.lstrip(":tokenise:")
-        tokenisedString =''
-        try:
-            tokenisedString = pos_tag(word_tokenize(baseText))
-        except:
-            import nltk
-            nltk.download('averaged_perceptron_tagger')
-            tokenisedString = pos_tag(word_tokenize(baseText))
-        finally:
-            event["message"]["text"] = json.dumps(tokenisedString)
-            print(event, type(event["message"]["text"]))
+        if(type(event["message"]["text"]) != dict):
+            baseText = baseText.lstrip(":tokenise:")
+            tokenisedString =''
+            try:
+                tokenisedString = pos_tag(word_tokenize(baseText))
+            except:
+                import nltk
+                nltk.download('averaged_perceptron_tagger')
+                tokenisedString = pos_tag(word_tokenize(baseText))
+            finally:
+                jsonObj = {}
+                for i in tokenisedString:
+                    jsonObj[i[0]] = i[1]
+                event["message"]["text"] = jsonObj
         self.send(text_data=json.dumps({
                 "room_id":event["room_id"],
                 "username":event["username"],

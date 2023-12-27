@@ -13,6 +13,44 @@
 {% endblock %}
 {% block jsScript%}
 <script>
+    const pos_tags ={
+        'CC': '#E57373', 
+        'CD': '#F06292',
+        'DT': '#BA68C8',
+        'EX': '#9575CD',
+        'FW': '#7986CB',
+        'IN': '#64B5F6',
+        'JJ': '#4FC3F7',
+        'JJR': '#4FC3F7',
+        'JJS': '#4FC3F7',
+        'LS': '#4DD0E1',
+        'MD': '#4DB6AC',
+        'NN': '#81C784',
+        'NNS': '#81C784',
+        'NNP': '#81C784',
+        'NNPS': '#81C784',
+        'PDT': '#AED581',
+        'POS': '#DCE775',
+        'WRB': '#FFF176',
+        'WP$': '#FFF176',
+        'WP': '#FFF176',
+        'WDT': '#FFF176',
+        'VBZ': '#FFD54F',
+        'VBP': '#FFD54F',
+        'VBN': '#FFD54F',
+        'VBG': '#FFD54F',
+        'VBD': '#FFD54F',
+        'VB': '#FFD54F',
+        'UH': '#FFB74D',
+        'TO': '#FF8A65',
+        'RP': '#A1887F',
+        'RBS': '#E0E0E0',
+        'RB': '#E0E0E0',
+        'RBR': '#E0E0E0',
+        'PRP': '#90A4AE',
+        'PRP$': '#90A4AE',
+    }
+
     const chatroom = "{{chatroom}}"
     const nickname = "{{nickname}}"
     console.log(chatroom, nickname)
@@ -44,12 +82,19 @@
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
         const message = data.message;
-        console.log(message)
         if(!message.notify){
-            if(data.username === nickname){
-                setMessage(data.username, message.text, true)
-            }else{
-                setMessage(data.username, message.text, false);
+            if(typeof(message.text) === 'string' && message.data !== null){
+                if(data.username === nickname){
+                    setMessage(data.username, message.text, true)
+                }else{
+                    setMessage(data.username, message.text, false);
+                }
+            } else{
+                if(data.username === nickname){
+                    setToken(data.username, message.text, true)
+                }else{
+                    setToken(data.username, message.text, false)
+                }
             }
         }else{
             setNotification(message.text);
@@ -57,6 +102,7 @@
     };
 
     function setMessage(nickname, message, owner){
+        console.log(message)
         var body = document.createElement('div')
         if(owner){
             body.setAttribute("class", "bg-primary p-2 ms-5 rounded border border-2 border-dark-subtle text-white text-end")
@@ -70,6 +116,37 @@
         var message = document.createTextNode(message);
         msg.appendChild(message);
         var container = document.getElementById('chatwindow');  
+        body.appendChild(user)
+        body.appendChild(msg);
+        container.appendChild(body)
+    }
+    
+    function setToken(nickname, message, owner){
+        console.log(message)
+        var body = document.createElement('div')
+        if(owner){
+            body.setAttribute("class", "bg-primary px-3 ms-5 rounded border border-2 border-dark-subtle text-white text-end")
+        }else{
+            body.setAttribute("class", "bg-dark px-3 me-5 rounded border border-2 border-dark-subtle text-white")
+        }
+        var user = document.createElement('div')
+        user.appendChild(document.createTextNode(nickname+":"))
+        user.setAttribute("class", "row fs-6 fst-italic text-grey")
+        var msg = document.createElement('div');
+        msg.setAttribute("class", "row fs-6 text-black")
+        for(const key in message){
+            var word = document.createElement('div')
+            word.appendChild(document.createTextNode(key))
+            word.setAttribute("class", "w-auto fs-7 m-1 px-2 rounded text-center")
+            if(message[key] in pos_tags){
+                word.style.backgroundColor = pos_tags[message[key]]
+            } else{
+                console.log("This colour is not in list")
+                word.style.backgroundColor = "#AAAAAA"
+            }
+            msg.appendChild(word)
+        }
+        var container = document.getElementById('chatwindow'); 
         body.appendChild(user)
         body.appendChild(msg);
         container.appendChild(body)
